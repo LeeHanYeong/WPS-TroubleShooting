@@ -28,7 +28,7 @@ class PostUpdateSerializer(serializers.ModelSerializer):
         required=False,
         write_only=True,
     )
-
+    
     class Meta:
         model = Post
         fields = (
@@ -41,8 +41,9 @@ class PostUpdateSerializer(serializers.ModelSerializer):
 
     def update(self, instance, validated_data):
         instance = super().update(instance, validated_data)
-        instance.tags.clear()
-        tag_names = validated_data.get('tag_names', [])
-        for tag_name in tag_names:
-            instance.tags.create(name=tag_name)
+        tag_names = validated_data.get('tag_names')
+        if tag_names and isinstance(tag_names, list):
+            instance.tags.clear()
+            for tag_name in tag_names:
+                instance.tags.create(name=tag_name)
         return instance
