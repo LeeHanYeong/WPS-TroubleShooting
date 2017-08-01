@@ -19,10 +19,11 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from rest_framework.routers import DefaultRouter
 
-from post.apis import PostViewSet
+from post.apis import PostViewSet, TagViewSet
 
 router = DefaultRouter()
 router.register(r'post', PostViewSet)
+router.register(r'tag', TagViewSet)
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),

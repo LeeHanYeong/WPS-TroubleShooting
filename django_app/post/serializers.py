@@ -1,11 +1,48 @@
 from rest_framework import serializers
+from rest_framework.exceptions import ValidationError
 
-from post.models import Post
+from post.models import Post, Tag
+
+
+class TagSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Tag
+        fields = '__all__'
 
 
 class PostSerializer(serializers.ModelSerializer):
-    # img_cover = serializers.ImageField(use_url=True)
+    tags = TagSerializer(many=True)
 
     class Meta:
         model = Post
         fields = '__all__'
+
+
+class PostUpdateSerializer(serializers.ModelSerializer):
+    tags = TagSerializer(
+        many=True,
+        read_only=True
+    )
+    tag_names = serializers.ListField(
+        child=serializers.CharField(),
+        required=False,
+        write_only=True,
+    )
+
+    class Meta:
+        model = Post
+        fields = (
+            'title',
+            'img_cover',
+            'content',
+            'tags',
+            'tag_names',
+        )
+
+    def update(self, instance, validated_data):
+        instance = super().update(instance, validated_data)
+        instance.tags.clear()
+        tag_names = validated_data.get('tag_names', [])
+        for tag_name in tag_names:
+            instance.tags.create(name=tag_name)
+        return instance
