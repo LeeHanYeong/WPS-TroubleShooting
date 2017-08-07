@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="ko">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport"
+	      content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>Facebook Login front</title>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+</head>
+<body>
+<h1 id="title"></h1>
+<pre id="log"></pre>
+
+<script>
+		// Facebook SDK가 초기화 된 시점
+		// 이 내부가 가장 최초로 FB객체를 사용할 수 있는 시점
+    window.fbAsyncInit = function () {
+        FB.init({
+            appId: '{{ facebook_app_id }}',
+            autoLogAppEvents: true,
+            xfbml: true,
+            version: 'v2.10'
+        });
+        FB.AppEvents.logPageView();
+        FB.getLoginStatus(function (response) {
+            statusChangeCallback(response);
+        });
+    };
+
+    function statusChangeCallback(response) {
+        console.log('statusChangeCallback');
+        console.log(response);
+
+        // 페이스북에 로그인 했을 경우
+        if (response.status === 'connected') {
+					$('#title').text('Facebook logged');
+					$('#log').text(
+					    'accessToken: ' + response.authResponse.accessToken + '\n' +
+							'userID: ' + response.authResponse.userID);
+        }
+        // 페이스북에 로그인되어있지 않은 상태
+        else {
+					$('#title').text('Facebook not logged');
+        }
+    }
+
+    // Load SDK asynchronously
+    (function (d, s, id) {
+        var js, fjs = d.getElementsByTagName(s)[0];
+        if (d.getElementById(id)) {
+            return;
+        }
+        js = d.createElement(s);
+        js.id = id;
+        js.src = "//connect.facebook.net/en_US/sdk.js";
+        fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));
+</script>
+
+<script>
+
+</script>
+
+</body>
+</html>

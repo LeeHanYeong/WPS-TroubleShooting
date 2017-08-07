@@ -21,6 +21,8 @@ from rest_framework.routers import DefaultRouter
 
 from post.apis import PostViewSet, TagViewSet
 
+from . import views
+
 router = DefaultRouter()
 router.register(r'post', PostViewSet)
 router.register(r'tag', TagViewSet)
@@ -28,6 +30,7 @@ router.register(r'tag', TagViewSet)
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^api/', include(router.urls)),
+    url(r'^$', views.FrontView.as_view()),
 ]
 urlpatterns += static(
     settings.MEDIA_URL, document_root=settings.MEDIA_ROOT,
