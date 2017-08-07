@@ -33,6 +33,7 @@ AUTH_USER_MODEL = 'member.User'
 
 # Facebook
 FACEBOOK_APP_ID = '1714579385238490'
+FACEBOOK_SECRET_CODE = '4bf87e8bf3a942a4d83123482b0b74ae'
 
 # Application definition
 
@@ -45,6 +46,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'rest_framework',
+    'rest_framework.authtoken',
 
     'member',
     'post',

@@ -20,6 +20,7 @@ from django.contrib import admin
 from rest_framework.routers import DefaultRouter
 
 from post.apis import PostViewSet, TagViewSet
+from member.apis import FacebookLoginView
 
 from . import views
 
@@ -30,6 +31,7 @@ router.register(r'tag', TagViewSet)
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^api/', include(router.urls)),
+    url(r'^api/facebook-login/', FacebookLoginView.as_view()),
     url(r'^$', views.FrontView.as_view()),
 ]
 urlpatterns += static(

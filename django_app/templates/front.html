@@ -7,12 +7,28 @@
 	<meta http-equiv="X-UA-Compatible" content="ie=edge">
 	<title>Facebook Login front</title>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+	<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+	<style>
+		pre {
+			background-color: #eee;
+			border-radius: 3px;
+			padding: 10px;
+		}
+	</style>
 </head>
 <body>
 <h1 id="title"></h1>
+
+<h3>Facebook측과의 통신 결과</h3>
 <pre id="log"></pre>
 
+<h3>DRF서버와의 통신 결과</h3>
+<pre id="log2"></pre>
+
+<button id="fb-btn" onclick="fbLogin()">페이스북 로그인</button>
+
 <script>
+		$('#fb-btn').hide();
 		// Facebook SDK가 초기화 된 시점
 		// 이 내부가 가장 최초로 FB객체를 사용할 수 있는 시점
     window.fbAsyncInit = function () {
@@ -38,11 +54,28 @@
 					$('#log').text(
 					    'accessToken: ' + response.authResponse.accessToken + '\n' +
 							'userID: ' + response.authResponse.userID);
+					// 서버에 요청
+		      axios.post('/api/facebook-login/', {
+              token: response.authResponse.accessToken
+          }).then(function(response) {
+              console.log(response);
+              $('#log2').text(JSON.stringify(response.data));
+		      }).catch(function(error) {
+							console.log(error);
+							$('#log2').text(error);
+		      });
         }
         // 페이스북에 로그인되어있지 않은 상태
         else {
 					$('#title').text('Facebook not logged');
+					$('#fb-btn').show();
         }
+    }
+
+    function fbLogin() {
+        FB.login(function(response) {
+            statusChangeCallback(response);
+        });
     }
 
     // Load SDK asynchronously
