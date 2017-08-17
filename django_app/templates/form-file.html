@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% block title %}Form file upload{% endblock %}
+{% block content %}
+<div>
+  <form id="form" action="" method="post" enctype="multipart/form-data">
+    <input type="text" name="title" value="Test title">
+    <input type="file" name="img_cover">
+  </form>
+  <button onclick="submit()">전송!</button>
+</div>
+{% endblock %}
+
+{% block script %}
+<script>
+  function submit() {
+    var formData = new FormData(document.querySelector('#form'));
+    for (var pair of formData.entries()) {
+      console.log(pair[0]+ ', ' + pair[1]); 
+    }
+    axios.post('/api/post/', formData)
+    .then(function(response) {
+      console.log(response);
+    })
+    .catch(function(error) {
+      console.log(error);
+    });
+  }
+</script>
+{% endblock %}

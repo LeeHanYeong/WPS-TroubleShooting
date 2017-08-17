@@ -1,22 +1,6 @@
-<!doctype html>
-<html lang="ko">
-<head>
-	<meta charset="UTF-8">
-	<meta name="viewport"
-	      content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-	<meta http-equiv="X-UA-Compatible" content="ie=edge">
-	<title>Facebook Login front</title>
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-	<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-	<style>
-		pre {
-			background-color: #eee;
-			border-radius: 3px;
-			padding: 10px;
-		}
-	</style>
-</head>
-<body>
+{% extends 'base.html' %}
+{% block title %}Facebook Login front{% endblock %}
+{% block content %}
 <h1 id="title"></h1>
 
 <h3>Facebook측과의 통신 결과</h3>
@@ -94,6 +78,4 @@
 <script>
 
 </script>
-
-</body>
-</html>
+{% endblock %}

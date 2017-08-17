@@ -1,14 +1,20 @@
 import requests
 from django.conf import settings
 from django.contrib.auth import get_user_model
+from rest_framework import generics
 from rest_framework.authtoken.models import Token
 from rest_framework.exceptions import APIException
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from member.serializers import UserSerializer
+from member.serializers import UserSerializer, UserCreationSerializer
 
 User = get_user_model()
+
+
+class UserCreateAPIVIew(generics.CreateAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserCreationSerializer
 
 
 class FacebookLoginView(APIView):

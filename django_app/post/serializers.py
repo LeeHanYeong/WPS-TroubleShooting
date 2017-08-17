@@ -1,5 +1,4 @@
 from rest_framework import serializers
-from rest_framework.exceptions import ValidationError
 
 from post.models import Post, Tag
 
@@ -18,6 +17,12 @@ class PostSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+class PostCreateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Post
+        fields = '__all__'
+
+
 class PostUpdateSerializer(serializers.ModelSerializer):
     tags = TagSerializer(
         many=True,
@@ -28,7 +33,7 @@ class PostUpdateSerializer(serializers.ModelSerializer):
         required=False,
         write_only=True,
     )
-    
+
     class Meta:
         model = Post
         fields = (
