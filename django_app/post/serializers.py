@@ -10,11 +10,24 @@ class TagSerializer(serializers.ModelSerializer):
 
 
 class PostSerializer(serializers.ModelSerializer):
+    extra = serializers.SerializerMethodField('get_asdf')
     tags = TagSerializer(many=True)
 
     class Meta:
         model = Post
-        fields = '__all__'
+        fields = (
+            'pk',
+            'title',
+            'img_cover',
+            'content',
+            'tags',
+            'created_date',
+
+            'extra',
+        )
+
+    def get_asdf(self, obj):
+        return self.context['extra']
 
 
 class PostCreateSerializer(serializers.ModelSerializer):

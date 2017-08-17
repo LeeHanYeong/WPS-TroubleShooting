@@ -19,7 +19,7 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from rest_framework.routers import DefaultRouter
 
-from post.apis import PostViewSet, TagViewSet
+from post.apis import PostViewSet, TagViewSet, PostDetailView
 from member.apis import FacebookLoginView, UserCreateAPIVIew
 
 from . import views
@@ -35,6 +35,7 @@ urlpatterns = [
     url(r'^api/user-create/', UserCreateAPIVIew.as_view()),
     url(r'^$', views.FrontView.as_view()),
     url(r'^form-file/', views.FormFileView.as_view()),
+    url(r'^post-detail/(?P<pk>\d+)/', PostDetailView.as_view()),
 ]
 urlpatterns += static(
     settings.MEDIA_URL, document_root=settings.MEDIA_ROOT,

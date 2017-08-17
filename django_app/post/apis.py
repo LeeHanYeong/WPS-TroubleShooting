@@ -1,5 +1,6 @@
-from rest_framework import viewsets, generics
+from rest_framework import viewsets
 from rest_framework.response import Response
+from rest_framework.views import APIView
 
 from post.models import Post, Tag
 from post.serializers import PostSerializer, TagSerializer, PostUpdateSerializer, \
@@ -17,25 +18,20 @@ class PostViewSet(viewsets.ModelViewSet):
         return PostSerializer
 
     def create(self, request, *args, **kwargs):
-        print(request.data)
-        print(args)
-        print(kwargs)
         return super().create(request, *args, **kwargs)
 
 
-# class PostListView(generics.ListAPIView):
-#     queryset = Post.objects.all()
-#
-#     def list(self, request, *args, **kwargs):
-#         queryset = self.filter_queryset(self.get_queryset())
-#
-#         page = self.paginate_queryset(queryset)
-#         if page is not None:
-#             serializer = self.get_serializer(page, many=True)
-#             return self.get_paginated_response(serializer.data)
-#
-#         serializer = self.get_serializer(queryset, many=True)
-#         return Response(serializer.data)
+class PostDetailView(APIView):
+    """
+    희진님 ModelSerializer의 extra data출력
+    PostSerializer를 참조
+    """
+    serializer_class = PostSerializer
+
+    def get(self, request, pk):
+        post = Post.objects.get(pk=pk)
+        serializer = self.serializer_class(instance=post, context={'extra': 'context-extra'})
+        return Response(serializer.data)
 
 
 class TagViewSet(viewsets.ModelViewSet):
