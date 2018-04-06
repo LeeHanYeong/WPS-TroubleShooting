@@ -15,7 +15,7 @@ class User(AbstractUser):
         if self.img_profile:
             # 이미지파일의 이름과 확장자를 가져옴
             full_name = self.img_profile.name.rsplit('/')[-1]
-            full_name_split = full_name.rsplit('.')
+            full_name_split = full_name.rsplit('.', maxsplit=1)
 
             temp_file = BytesIO()
             temp_file.write(self.img_profile.read())
@@ -23,7 +23,7 @@ class User(AbstractUser):
             mime_info = magic.from_buffer(temp_file.read(), mime=True)
             temp_file.seek(0)
 
-            name = ''.join(full_name_split[:-1]) if len(full_name_split) > 1 else full_name
+            name = full_name_split[0]
             ext = mime_info.split('/')[-1]
 
             # Pillow를 사용해 이미지 파일 로드
