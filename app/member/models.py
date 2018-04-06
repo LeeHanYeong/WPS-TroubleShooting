@@ -2,16 +2,47 @@ from io import BytesIO
 
 import magic
 from PIL import Image
-from django.contrib.auth.models import AbstractUser
+from django.contrib.auth.models import AbstractUser, UserManager as DjangoUserManager
+from django.core.exceptions import ValidationError
 from django.core.files import File
 from django.db import models
 
 
+class UserManager(DjangoUserManager):
+    def create_django_user(self, *args, **kwargs):
+        return super().create_user(*args, **kwargs)
+
+    def create_facebook_user(self, *args, **kwargs):
+        pass
+
+    def create_google_user(self, *args, **kwargs):
+        pass
+
+
 class User(AbstractUser):
+    USER_TYPE_DJANGO = 'd'
+    USER_TYPE_FACEBOOK = 'f'
+    USER_TYPE_GOOGLE = 'g'
+    CHOICES_USER_TYPE = (
+        (USER_TYPE_DJANGO, 'Django'),
+        (USER_TYPE_FACEBOOK, 'Facebook'),
+        (USER_TYPE_GOOGLE, 'Google'),
+    )
+    user_type = models.CharField(max_length=1, choices=CHOICES_USER_TYPE, default=USER_TYPE_DJANGO)
     img_profile = models.ImageField(upload_to='user', blank=True)
     img_profile_thumbnail = models.ImageField(upload_to='user', blank=True)
 
+    objects = UserManager()
+
     def save(self, *args, **kwargs):
+        self._save_thumbnail_process()
+        super().save(*args, **kwargs)
+
+    def _save_thumbnail_process(self):
+        """
+        save() 메서드 실행 도중 img_profile필드의 썸네일 생성에 관한 로직
+        :return:
+        """
         if self.img_profile:
             # 이미지파일의 이름과 확장자를 가져옴
             full_name = self.img_profile.name.rsplit('/')[-1]
@@ -39,4 +70,3 @@ class User(AbstractUser):
             self.img_profile_thumbnail.save(f'{name}_thumbnail.{ext}', File(temp_file), save=False)
         else:
             self.img_profile_thumbnail.delete(save=False)
-        super().save(*args, **kwargs)

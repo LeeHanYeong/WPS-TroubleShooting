@@ -7,14 +7,14 @@ from rest_framework.exceptions import APIException
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from member.serializers import UserSerializer, UserCreationSerializer
+from .serializers import UserSerializer, DjangoUserCreationSerializer
 
 User = get_user_model()
 
 
-class UserCreateAPIVIew(generics.CreateAPIView):
+class DjangoUserCreateView(generics.CreateAPIView):
     queryset = User.objects.all()
-    serializer_class = UserCreationSerializer
+    serializer_class = DjangoUserCreationSerializer
 
 
 class FacebookLoginView(APIView):

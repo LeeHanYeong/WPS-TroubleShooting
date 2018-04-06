@@ -20,7 +20,7 @@ from django.contrib import admin
 from rest_framework.routers import DefaultRouter
 
 from post.apis import PostViewSet, TagViewSet, PostDetailView
-from member.apis import FacebookLoginView, UserCreateAPIVIew
+from member.apis import FacebookLoginView, DjangoUserCreateView
 
 from . import views
 
@@ -32,7 +32,7 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^api/', include(router.urls)),
     url(r'^api/facebook-login/', FacebookLoginView.as_view()),
-    url(r'^api/user-create/', UserCreateAPIVIew.as_view()),
+    url(r'^api/user-create/', DjangoUserCreateView.as_view()),
     url(r'^$', views.FrontView.as_view()),
     url(r'^form-file/', views.FormFileView.as_view()),
     url(r'^post-detail/(?P<pk>\d+)/', PostDetailView.as_view()),
